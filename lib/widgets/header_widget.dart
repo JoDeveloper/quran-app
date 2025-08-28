@@ -1,62 +1,39 @@
 import 'package:flutter/material.dart';
-
-import 'package:quran/quran.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HeaderWidget extends StatelessWidget {
-  var e;
-  var jsonData;
+  final Map<String, dynamic> e;
+  final Map<String, dynamic> jsonData;
 
-  HeaderWidget(
-      {super.key, required this.e, required this.jsonData, });
+  const HeaderWidget({super.key, required this.e, required this.jsonData});
 
   @override
   Widget build(BuildContext context) {
- 
-    return SizedBox(
-      height: 50,
-      child: Stack(
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 8.h),
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: Colors.orange.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Colors.orange.withValues(alpha: 0.3),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Center(
-            child: Image.asset(
-              "assets/images/888-02.png",
-              width: MediaQuery.of(context).size.width,
-              height: 50,
-    
+          Text(
+            'Surah ${e["surah"]}',
+            style: TextStyle(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.bold,
+              color: Colors.orange[800],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15.7, vertical: 7),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text(
-                  textAlign: TextAlign.center,
-                  "اياتها\n${getVerseCount(e["surah"])}",
-                  style: const TextStyle(
-        
-                      fontSize: 5,
-                      fontFamily: "UthmanicHafs13"),
-                ),
-                Center(
-                    child:RichText(text:  TextSpan(text:                 e["surah"].toString(),
-
-                  // textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontFamily: "arsura",
-                    fontSize: 22,color: Colors.black
-             
-                  ),
-                ))),
-                Text(
-                  "ترتيبها\n${e["surah"]}",
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-             
-                      fontSize: 5,
-                      fontFamily: "UthmanicHafs13"),
-                ),
-              ],
-            ),
+          Text(
+            'Verses ${e["start"]}-${e["end"]}',
+            style: TextStyle(fontSize: 14.sp, color: Colors.grey[600]),
           ),
         ],
       ),

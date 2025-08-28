@@ -13,23 +13,28 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var widgejsonData;
+  Map<String, dynamic>? jsonData;
 
-  loadJsonAsset() async {
-    final String jsonString =
-        await rootBundle.loadString('assets/json/surahs.json');
-    var data = jsonDecode(jsonString);
-    setState(() {
-      widgejsonData = data;
-    });
+  Future<void> loadJsonAsset() async {
+    try {
+      final String jsonString = await rootBundle.loadString(
+        'assets/json/surahs.json',
+      );
+      final data = jsonDecode(jsonString) as Map<String, dynamic>;
+      if (mounted) {
+        setState(() {
+          jsonData = data;
+        });
+      }
+    } catch (e) {
+      debugPrint('Error loading JSON: $e');
+    }
   }
 
   @override
   void initState() {
-    loadJsonAsset();
-
-    // TODO: implement initState
     super.initState();
+    loadJsonAsset();
   }
 
   @override
@@ -38,15 +43,18 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: quranPagesColor,
       body: Center(
         child: ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (builder) => QuranPage(
-                            suraJsonData: widgejsonData,
-                          )));
-            },
-            child: const Text("Go To Quran Page")),
+          onPressed: jsonData != null
+              ? () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (builder) => QuranPage(suraJsonData: jsonData!),
+                    ),
+                  );
+                }
+              : null,
+          child: Text(jsonData != null ? "Go To Quran Page" : "Loading..."),
+        ),
       ),
     );
   }
